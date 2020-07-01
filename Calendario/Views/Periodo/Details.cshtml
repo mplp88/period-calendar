@@ -1,45 +1,60 @@
 ﻿@model Calendario.ViewModels.PeriodoViewModel
 
 @{
-    ViewData["Title"] = "Detalle";
+  ViewData["Title"] = "Detalle";
 }
 
 <h1>Detalle</h1>
 
-<div>
-    <h4>Periodo</h4>
-    <hr />
-    <dl class="row">
-        <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.Id)
-        </dd>
-        <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.Inicio)
+<h4>Periodo</h4>
+<hr />
+<div class="row">
+  <div class="col-6">
+    <input asp-for="Inicio" type="hidden" />
+    <input asp-for="Fin" type="hidden" />
+    <div class="row">
+      <dl class="col-12">
+        <dt class="col-4">
+          @Html.DisplayNameFor(model => model.Inicio)
         </dt>
-        <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.Inicio)
+        <dd class="col-8">
+          @Html.DisplayFor(model => model.Inicio)
         </dd>
-        <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.Fin)
+        <dt class="col-4">
+          @Html.DisplayNameFor(model => model.Fin)
         </dt>
-        <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.Fin)
+        <dd class="col-8">
+          @Html.DisplayFor(model => model.Fin)
         </dd>
-        <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.ProximaFechaPosible)
+        <dt class="col-4">
+          @Html.DisplayNameFor(model => model.ProximaFechaPosible)
         </dt>
-        <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.ProximaFechaPosible)
+        <dd class="col-8">
+          @Html.DisplayFor(model => model.ProximaFechaPosible)
         </dd>
-        <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.Duracion)
+        <dt class="col-4">
+          @Html.DisplayNameFor(model => model.Duracion)
         </dt>
-        <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.Duracion)
+        <dd class="col-8">
+          @Html.DisplayFor(model => model.Duracion) días
         </dd>
-    </dl>
+      </dl>
+    </div>
+  </div>
+  <div id="calendar" class="col-6">
+    <v-calendar class="mx-auto" :attributes="attrs" :locale="locale">
+      <p>Cargando calendario... <i class="fas fa-spinner fa-spin"></i></p>
+    </v-calendar>
+  </div>
 </div>
+
 <div>
-    @Html.ActionLink("Edit", "Edit", new { id = Model.Id}) |
-    <a asp-action="Index">Back to List</a>
+  <a asp-action="Index">Volver</a> |
+  @Html.ActionLink("Editar", "Edit", new { id = Model.Id }) |
+  @Html.ActionLink("Eliminar", "Delete", new { id = Model.Id })
 </div>
+
+@section Scripts {
+  <script src='https://unpkg.com/v-calendar'></script>
+  <script src="~/js/calendar.js"></script>
+} 

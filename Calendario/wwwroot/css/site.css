@@ -70,17 +70,6 @@ body {
   line-height: 60px; /* Vertically center the text there */
 }
 
-.calendar {
-    border: 1px solid black;
-}
-
-.calendar .header {
-    background-color: rgb(128,128,128);
-    font-weight: 700;
-}
-
-.calendar .cell {
-    width: calc(100% / 7);
-    text-align: right;
-    border: 1px solid black;
+#period-list tbody tr:hover {
+    background-color: #DDD;
 }

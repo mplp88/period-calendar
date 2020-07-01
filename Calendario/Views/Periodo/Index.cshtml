@@ -1,53 +1,119 @@
 ﻿@model IEnumerable<Calendario.ViewModels.PeriodoViewModel>
 
 @{
-    ViewData["Title"] = "Index";
+  ViewData["Title"] = "Periodos";
 }
 
-<h1>Index</h1>
+<h1>Periodos</h1>
 
-<p>
-    <a asp-action="Create">Create New</a>
+<p class="text-right">
+  <a asp-action="Create">
+    <span class="btn btn-primary" data-toggle="tooltip" title="Agregar nuevo">
+      <i class="fas fa-plus"></i>
+    </span>
+  </a>
 </p>
-<table class="table">
-    <thead>
+<div class="row">
+  <div id="calendar" class="col-4 mx-auto">
+    <v-calendar ref="calendar" class="mx-auto" :attributes="attrs" :locale="locale" :mode="mode">
+      <p>Cargando calendario... <i class="fas fa-spinner fa-spin"></i></p>
+    </v-calendar>
+  </div>
+  <div id="period-list" class="col-8 overflow-auto">
+    <table class="table">
+      <thead>
         <tr>
-            <th>
-                @Html.DisplayNameFor(model => model.Inicio)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Fin)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.ProximaFechaPosible)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Duracion)
-            </th>
-            <th></th>
+          <th scope="col">
+            @Html.DisplayNameFor(model => model.Inicio)
+          </th>
+          <th scope="col">
+            @Html.DisplayNameFor(model => model.Fin)
+          </th>
+          <th scope="col">
+            @Html.DisplayNameFor(model => model.ProximaFechaPosible)
+          </th>
+          <th scope="col">
+            @Html.DisplayNameFor(model => model.Duracion)
+          </th>
+          <th scope="col">Acciones</th>
         </tr>
-    </thead>
-    <tbody>
-@foreach (var item in Model) {
-        <tr>
-            <td>
-                @Html.DisplayFor(modelItem => item.Inicio)
+      </thead>
+      <tbody>
+        @foreach (var item in Model)
+        {
+          <tr @@mouseenter="mouseenter('@Html.Raw(item.Id)')" @@mouseleave="mouseleave">
+            <td scope="row">
+              @Html.DisplayFor(modelItem => item.Inicio)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.Fin)
+              @Html.DisplayFor(modelItem => item.Fin)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.ProximaFechaPosible)
+              @Html.DisplayFor(modelItem => item.ProximaFechaPosible)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.Duracion)
+              @Html.DisplayFor(modelItem => item.Duracion)
             </td>
-            <td>
-                @Html.ActionLink("Edit", "Edit", new { id= item.Id }) |
-                @Html.ActionLink("Details", "Details", new { id = item.Id }) |
-                @Html.ActionLink("Delete", "Delete", new { id = item.Id  })
+            <td class="container">
+              <div class="row">
+                <div class="col-4">
+                  <a href="@Url.Action("Details", new { id = item.Id })" data-toggle="tooltip" title="Detalles">
+                    <span class="btn btn-outline-primary">
+                      <i class="fas fa-search"></i>
+                    </span>
+                  </a>
+                </div>
+                <div class="col-4" >
+                  <a href="@Url.Action("Edit", new { id = item.Id })" data-toggle="tooltip" title="Editar">
+                    <span class="btn btn-outline-primary">
+                      <i class="fas fa-edit"></i>
+                    </span>
+                  </a>
+                </div>
+                <div class="col-4">
+                  <a href="@Url.Action("Delete", new { id = item.Id })" data-toggle="tooltip" title="Eliminar">
+                    <span class="btn btn-outline-danger">
+                      <i class="fas fa-trash"></i>
+                    </span>
+                  </a>
+                </div>
+              </div>
             </td>
-        </tr>
+          </tr>
+        }
+      </tbody>
+    </table>
+  </div>
+</div>
+@section Scripts {
+  <script src='https://unpkg.com/v-calendar'></script>
+  <script src="~/js/calendar.js"></script>
+  <script src="~/js/periodlist.js"></script>
+  <script>
+    $(document).ready(function () {
+      let dates = @Html.Raw(Json.Serialize(Model));
+      let vm = calendar;
+
+      dates.forEach(e => {
+        let start = e.inicio;
+        let end = e.fin;
+        let key = e.id
+        if(start && end) {
+          vm.createAttr({
+            start,
+            end
+          }, key, 'pink', 'Periodo');
+          return;
+        }
+
+        if (start) {
+          vm.createAttr(start, key , 'pink', 'Inicio');
+        }
+
+        if (end) {
+          vm.createAttr(end, 'key', 'pink', 'Fin');
+        }
+      })
+    })
+  </script>
 }
-    </tbody>
-</table>

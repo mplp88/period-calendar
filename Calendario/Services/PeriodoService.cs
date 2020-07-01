@@ -24,7 +24,7 @@ namespace Calendario.Services
         {
             try
             {
-                var periodos = context.Periodos.ToList();
+                var periodos = context.Periodos.OrderBy(p => p.Inicio).ToList();
                 return PeriodoViewModel.FromPeriodoList(periodos);
             }
             catch (Exception e)
@@ -55,7 +55,7 @@ namespace Calendario.Services
                     throw new Exception("La fecha de fin debe ser posterior a la fecha de inicio.");
                 }
                 periodo.ProximaFechaPosible = ((DateTime)periodo.Fin).AddDays(21);
-                periodo.Duracion = Convert.ToInt32(((DateTime)periodo.Fin).Subtract(periodo.Inicio).TotalDays);
+                periodo.Duracion = Convert.ToInt32(((DateTime)periodo.Fin).Subtract(periodo.Inicio).TotalDays + 1);
             }
             context.Periodos.Add(periodo);
             context.SaveChanges();
@@ -75,7 +75,7 @@ namespace Calendario.Services
                         throw new Exception("La fecha de fin debe ser posterior a la fecha de inicio.");
                     }
                     nuevoPeriodo.ProximaFechaPosible = ((DateTime)nuevoPeriodo.Fin).AddDays(21);
-                    nuevoPeriodo.Duracion = Convert.ToInt32(((DateTime)nuevoPeriodo.Fin).Subtract(nuevoPeriodo.Inicio).TotalDays);
+                    nuevoPeriodo.Duracion = Convert.ToInt32(((DateTime)nuevoPeriodo.Fin).Subtract(nuevoPeriodo.Inicio).TotalDays + 1);
                 }
                 context.Periodos.Update(nuevoPeriodo);
                 context.SaveChanges();
